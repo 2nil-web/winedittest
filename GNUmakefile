@@ -48,7 +48,6 @@ TARGET=${PREFIX}${EXEXT}
 ISO8601 := $(shell date +%Y-%m-%dT%H:%M:%SZ)
 .PHONY: FORCE
 
-
 all : version_check.txt version.h ${TARGET}
 	make ${TARGET}
 
@@ -91,14 +90,12 @@ help :
 	@${ECHO} "7-Livraison                  : make deliv # (ToDo)"
 	@${ECHO} "Pour le versionnage, respecter la sémantique de version (cf. semver.org, i.e.: MAJOR.MINOR.PATCH-pre_release+metadata ...)"
 
-
 clean :
 	rm -f *~ *.o $(OBJS)
 
 rclean :
 	rm -f *~ *.d *.o $(OBJS) ${TARGET} *.exe
 	rm -rf x64 wineditline/build wineditline/bin64 wineditline/lib64 wineditline/include
-
 
 # Génération du version.h intégré dans l'appli
 version.h : version_check.txt

@@ -71,7 +71,7 @@ int main(int, char **)
       }
 
       if (!line.empty()) {
-        std::cout << vt_txt(VT_Green)+vt_txt(VT_Bold)+vt_txt(VT_Italic);
+        std::cout << vt_txt(VT_Green)+vt_txt(VT_Bold)+vt_txt(VT_Italic) << std::flush;
         std::system(line.c_str());
         std::cout << vt_txt(VT_Reset);
         add_history((char *)line.c_str());
