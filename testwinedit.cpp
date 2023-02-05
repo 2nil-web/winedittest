@@ -73,7 +73,7 @@ int main(int, char **)
       if (!line.empty()) {
         std::cout << vt_txt(VT_Green)+vt_txt(VT_Bold)+vt_txt(VT_Italic);
         std::system(line.c_str());
-        std::cout << vt_txt(VT_Reset) << ' ' << std::flush; //Reset
+        std::cout << vt_txt(VT_Reset);
         add_history((char *)line.c_str());
         idx++;
       }
@@ -84,3 +84,4 @@ int main(int, char **)
   
   return 0;
 }
+
