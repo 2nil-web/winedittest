@@ -185,6 +185,7 @@ BOOL _el_signal_handler(DWORD fdwCtrlType)
   _el_ctrl_c_pressed = FALSE;
   switch (fdwCtrlType) {
     case CTRL_C_EVENT:
+//    puts("Ctrl-C"); fflush(stdout);
     if (_el_line_buffer && wcslen(_el_line_buffer)) {
       _el_ctrl_c_pressed = TRUE;
     }
@@ -1004,7 +1005,6 @@ char *readline(const char *prompt)
     line_len = 0;
     while (readfile_buf != '\n') {
       read_ok = ReadFile(_el_h_in, &readfile_buf, 1, &actually_read, NULL);
-      printf("%d", (int)readfile_buf);
       if (!(read_ok && actually_read)) {
         break;
       }
@@ -1038,8 +1038,7 @@ char *readline(const char *prompt)
     | ENABLE_EXTENDED_FLAGS | ENABLE_INSERT_MODE
     | ENABLE_QUICK_EDIT_MODE);
   SetConsoleMode(_el_h_out, ENABLE_PROCESSED_OUTPUT);
-  SetConsoleCtrlHandler((PHANDLER_ROUTINE)
-    _el_signal_handler, TRUE);
+  SetConsoleCtrlHandler((PHANDLER_ROUTINE) _el_signal_handler, TRUE);
   rl_point = 0;
   while ((buf[0] != VK_RETURN)
     && (!_el_ctrl_c_pressed) && _el_line_buffer) {
@@ -1113,6 +1112,7 @@ char *readline(const char *prompt)
       _el_clean_exit();
       return NULL;
     }
+    
     if (count) {
       if ((irBuffer.EventType == KEY_EVENT) && irBuffer.Event.KeyEvent.bKeyDown) {
         /*
@@ -1436,7 +1436,7 @@ char *readline(const char *prompt)
               return NULL;
             }
             break;
-
+#ifdef NOT_MY_CTRLD
             /*
             delete char
             */
@@ -1450,7 +1450,19 @@ char *readline(const char *prompt)
               compl_pos = -1;
             }
             break;
-            
+#endif
+            /* EOF pressed ==> exit */
+            case 0x04:  /* CTRL + D */
+            case 0x1A:  /* CTRL + Z */
+            {
+              _el_w2mb(_el_line_buffer, &rl_line_buffer);
+              ret_string = (rl_line_buffer ? _strdup(rl_line_buffer) : NULL);
+              size_t l=strlen(ret_string)+5;
+              char *ret_eof=realloc(ret_string, l);
+              sprintf_s(ret_eof, l, "%s#EOF", ret_string);
+              return ret_eof;
+            }
+
             /*
             if it is a printable character, print it
             NOTE: I have later commented out the
@@ -1498,10 +1510,11 @@ char *readline(const char *prompt)
       }
       _el_line_buffer[0] = _T('\0');
     }
+
     _el_w2mb(_el_line_buffer, &rl_line_buffer);
     ret_string = (rl_line_buffer ? _strdup(rl_line_buffer) : NULL);
   }
-  _el_clean_exit();
   
+  _el_clean_exit();
   return ret_string;
 }

@@ -2,7 +2,7 @@
 ifneq ($(shell uname -s),Linux)
 ifeq (${HOSTNAME},PC-Denis)
 CMAKE='/c/Program Files/CMake/bin/cmake.exe'
-#MSBUILD='C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\MSBuild.exe'
+MSBUILD='C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\MSBuild.exe'
 endif
 
 ifneq (${MSYSTEM},MSYS)
@@ -55,13 +55,13 @@ all : version_check.txt version.h ${TARGET}
 ifeq ($(MSBUILD),)
 ${TARGET} : ${OBJS}
 else
-${TARGET} : wineditline/include/editline/readline.h ${SRCS}
+${TARGET} : wineditline/lib64/edit_a.lib ${SRCS}
 	${MSBUILD} ${PREFIX}.sln -p:Configuration=Release
 	cp x64/Release/${TARGET} .
 endif
 
-wineditline/include/editline/readline.h :
-	cd wineditline && mkdir -p build && cd build && ${CMAKE} -A x64 .. && ${MSBUILD} -p:Configuration=Release INSTALL.vcxproj
+wineditline/lib64/edit_a.lib : wineditline/src/*.c
+	cd wineditline && test -d build && cd build || ( mkdir -p build && cd build && ${CMAKE} -A x64 .. ) && ${MSBUILD} -p:Configuration=Release INSTALL.vcxproj
 
 strip : ${TARGET}
 	@file ${TARGET} | grep stripped >/dev/null || ( $(STRIP) ${TARGET} && echo "Strip OK" )

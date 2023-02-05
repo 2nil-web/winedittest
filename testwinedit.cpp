@@ -55,22 +55,30 @@ int main(int, char **)
 {
   std::string line;
   int idx=1;
+  bool do_exit=false;
+
   open_console();
   std::cout << "Type exit/quit/x/q to quit."  << std::endl;
+
   while (rdlnpp("prompt "+std::to_string(idx)+">", line)) {
     if (line == "exit" || line == "quit" || line == "q" || line == "x") break;
 
     if (!line.empty()) {
-      if (line.size() == 1 && (int)line[0] == 26) {
-        std::cout << (int)line[0] << std::endl;
-        break;
-      } else {
+      // If line ends with #EOF then exit after command if there is
+      if (line.ends_with("#EOF")) {
+        line.erase(line.end()-4, line.end());
+        do_exit=true;
+      }
+
+      if (!line.empty()) {
         std::cout << vt_txt(VT_Green)+vt_txt(VT_Bold)+vt_txt(VT_Italic);
         std::system(line.c_str());
-        std::cout << vt_txt(VT_Reset); //Reset
+        std::cout << vt_txt(VT_Reset) << ' ' << std::flush; //Reset
         add_history((char *)line.c_str());
         idx++;
       }
+
+      if (do_exit) break;
     }
   }
   
