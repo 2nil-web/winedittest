@@ -1004,6 +1004,7 @@ char *readline(const char *prompt)
     line_len = 0;
     while (readfile_buf != '\n') {
       read_ok = ReadFile(_el_h_in, &readfile_buf, 1, &actually_read, NULL);
+      printf("%d", (int)readfile_buf);
       if (!(read_ok && actually_read)) {
         break;
       }

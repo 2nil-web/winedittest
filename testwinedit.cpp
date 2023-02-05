@@ -5,13 +5,8 @@
 #ifdef _MSC_VER
 #include "editline/readline.h"
 #else
-//#if !defined (__linux__) && !defined (NCURSES_VERSION) && !defined (_TERMCAP_H)
-//#include <termcap.h>
-//#endif
-//#include <readline/readline.h>
-extern "C" char *readline (const char *);
-extern "C" void add_history (const char *);
-//#include <readline/history.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 #endif
 
 #include "vt_text_format.h"

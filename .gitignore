@@ -9,6 +9,7 @@ x64
 RES
 build
 .vs
+wineditline/include
 version_check.txt
 version.h
 version.json
