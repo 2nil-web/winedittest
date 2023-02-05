@@ -2,7 +2,7 @@
 ifneq ($(shell uname -s),Linux)
 ifeq (${HOSTNAME},PC-Denis)
 CMAKE='/c/Program Files/CMake/bin/cmake.exe'
-MSBUILD='C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\MSBuild.exe'
+#MSBUILD='C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\MSBuild.exe'
 endif
 
 ifneq (${MSYSTEM},MSYS)
