@@ -1,0 +1,14 @@
+x64
+*.d
+*.o
+*.exe
+*.err
+*.ico
+*~
+*.log
+RES
+build
+.vs
+version_check.txt
+version.h
+version.json
