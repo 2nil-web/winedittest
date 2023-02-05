@@ -40,7 +40,7 @@ GDB=gdb
 STRIP=strip
 UPX=upx
 
-PREFIX=testwinedit
+PREFIX=testedit
 #SRCS=$(wildcard *.cpp)
 SRCS=${PREFIX}.cpp
 OBJS=$(SRCS:.cpp=.o)
