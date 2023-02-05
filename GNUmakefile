@@ -1,6 +1,7 @@
 
 ifneq ($(shell uname -s),Linux)
 ifeq (${HOSTNAME},PC-Denis)
+CMAKE='/c/Program Files/CMake/bin/cmake.exe'
 MSBUILD='C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\MSBuild.exe'
 endif
 
@@ -54,10 +55,13 @@ all : version_check.txt version.h ${TARGET}
 ifeq ($(MSBUILD),)
 ${TARGET} : ${OBJS}
 else
-${TARGET} : ${SRCS}
+${TARGET} : wineditline/include/editline/readline.h ${SRCS}
 	${MSBUILD} ${PREFIX}.sln -p:Configuration=Release
 	cp x64/Release/${TARGET} .
 endif
+
+wineditline/include/editline/readline.h :
+	cd wineditline && mkdir -p build && cd build && ${CMAKE} -A x64 .. && ${MSBUILD} -p:Configuration=Release INSTALL.vcxproj
 
 strip : ${TARGET}
 	@file ${TARGET} | grep stripped >/dev/null || ( $(STRIP) ${TARGET} && echo "Strip OK" )
@@ -93,7 +97,7 @@ clean :
 
 rclean :
 	rm -f *~ *.d *.o $(OBJS) ${TARGET} *.exe
-	rm -rf x64
+	rm -rf x64 wineditline/build wineditline/bin64 wineditline/lib64 wineditline/include
 
 
 # Génération du version.h intégré dans l'appli
