@@ -58,8 +58,8 @@ ${TARGET} : wineditline/lib64/edit_a.lib ${SRCS}
 	${MSBUILD} ${PREFIX}.sln -p:Configuration=Release
 	cp x64/Release/${TARGET} .
 
-wineditline/lib64/edit_a.lib : wineditline/src/editline.c wineditline/src/fn_complete.c wineditline/src/history.c
-	cd wineditline && test -d build && cd build || mkdir -p build && cd build && ${CMAKE} -A x64 .. && sleep 1
+wineditline/lib64/edit_a.lib : wineditline/src/*.c
+	cd wineditline && test -d build && cd build || mkdir -p build && cd build && ${CMAKE} -A x64 ..
 	cd wineditline/build && ${MSBUILD} -p:Configuration=Release INSTALL.vcxproj
 endif
 
